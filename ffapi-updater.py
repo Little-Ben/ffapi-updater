@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # ------------------------------------------------------------------------------
 #
@@ -25,7 +25,8 @@
 # Configuration start
 APIFILE = '../api/FreifunkWestpfalz-api.json'
 NODESFILE = '../ffmap-data/nodes.json'
-# Configuration end ------------------------------------------------------------
+# Configuration end 
+# ------------------------------------------------------------------------------
 
 VERSION = 'V1.0'
 
@@ -49,9 +50,8 @@ with open(NODESFILE) as node_file:
 #count active nodes
 iNodeCount=0
 for node in dataNodes["nodes"]:
-    nid=node
-    if nid["flags"]["online"] == True:
-      iNodeCount = iNodeCount + 1
+    if node["flags"]["online"] == True:
+        iNodeCount = iNodeCount + 1
 
 #data update
 print("UTC time:\t\t ", datetime.utcnow().strftime("%Y-%m-%dT%T.%f"))
