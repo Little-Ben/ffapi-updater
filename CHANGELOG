@@ -1,6 +1,9 @@
 ffapi-updater
 =============
 
+V1.1.0 2016-02-13 Little.Ben 
+  + only update API file if changes happened
+
 V1.0 2016-02-12 Little.Ben 
   + initial version
 

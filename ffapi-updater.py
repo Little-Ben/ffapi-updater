@@ -18,6 +18,8 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+#    Source code available at: https://github.com/Little-Ben/ffapi-updater
+#
 # ------------------------------------------------------------------------------
 # This python script counts all active nodes (online = true) in NODEFILE
 # and updates the node count and lastchange date (UTC) in APIFILE.
@@ -28,17 +30,18 @@ NODESFILE = '../ffmap-data/nodes.json'
 # Configuration end 
 # ------------------------------------------------------------------------------
 
-VERSION = 'V1.0'
+VERSION = 'V1.1.0'
 
 import json
 from pprint import pprint
 from datetime import datetime
 
-print("\nffapi-updater ",VERSION," Copyright (C) 2016 Benjamin Schmitt")
+print("\nffapi-updater",VERSION,"Copyright (C) 2016 Benjamin Schmitt")
 print("----------------------------------------------------------------------")
 print("This program comes with ABSOLUTELY NO WARRANTY.")
 print("This is free software, and you are welcome to redistribute it,")
 print("see LICENSE for details.")
+print("Source code available at: https://github.com/Little-Ben/ffapi-updater")
 print("----------------------------------------------------------------------")
 
 with open(APIFILE) as data_file:
@@ -55,16 +58,26 @@ for node in dataNodes["nodes"]:
 
 #data update
 print("UTC time:\t\t ", datetime.utcnow().strftime("%Y-%m-%dT%T.%f"))
-print("node count old:\t\t ", str(data["state"]["nodes"]))
+iNodeCountOld=data["state"]["nodes"]
+print("node count old:\t\t ", str(iNodeCountOld))
 data["state"]["nodes"] = iNodeCount
 data["state"]["lastchange"] = datetime.utcnow().strftime("%Y-%m-%dT%T.%f")
 print("node count new:\t\t ", str(data["state"]["nodes"]))
 
-#write new api file, sorted and prettyprint
-with open(APIFILE, 'w') as outfile:
-    json.dump(data, outfile, sort_keys=True, indent=4, separators=(',', ': '))
+if iNodeCountOld != iNodeCount:
+    #write new api file, sorted and prettyprinted - only if node count changed
+    with open(APIFILE, 'w') as outfile:
+        json.dump(data, outfile, sort_keys=True, indent=4, separators=(',', ': '))
+    bApiChanged=True
+else:
+    bApiChanged=False
 
+#write end message depending if changes happend
 print("----------------------------------------------------------------------")
-print("API file updated successfully. DONE.\n")
+if bApiChanged == True:
+    strEndMessage="API file updated successfully."
+else:
+    strEndMessage="API file unchanged."
+print(strEndMessage, "DONE.\n")
 
 exit(0)
